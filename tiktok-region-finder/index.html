@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Region Finder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #111111;
+            --text-primary: #ffffff;
+            --text-secondary: #8e8e93;
+            --border: #2c2c2e;
+            --input-bg: #1c1c1e;
+            --silver-light: #e2e2e7;
+            --silver-dark: #aeaeb2;
+            --card-bg: rgba(28, 28, 30, 0.6);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            user-select: none;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            border: 1px solid var(--border);
+        }
+        
+        .logo i {
+            font-size: 40px;
+            color: var(--text-primary);
+        }
+        
+        h1 {
+            font-size: 44px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.025em;
+        }
+        
+        .subtitle {
+            font-size: 19px;
+            color: var(--text-secondary);
+            max-width: 540px;
+            margin: 0 auto 36px;
+            letter-spacing: -0.015em;
+        }
+        
+        .search-container {
+            max-width: 560px;
+            margin: 0 auto 70px;
+        }
+        
+        .search-header {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .search-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+        
+        .search-header p {
+            font-size: 17px;
+            color: var(--text-secondary);
+        }
+        
+        .input-container {
+            background-color: var(--input-bg);
+            border-radius: 16px;
+            padding: 4px;
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+        
+        .input-container:focus-within {
+            box-shadow: 0 0 0 4px rgba(0, 125, 250, 0.3);
+            border-color: rgba(0, 125, 250, 0.8);
+        }
+        
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            padding: 6px 16px;
+        }
+        
+        .input-icon {
+            margin-right: 12px;
+            color: var(--text-secondary);
+            font-size: 18px;
+        }
+        
+        input {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 17px;
+            padding: 14px 0;
+            width: 100%;
+            outline: none;
+            font-weight: 500;
+        }
+        
+        button {
+            width: 100%;
+            background: linear-gradient(180deg, var(--silver-light) 0%, var(--silver-dark) 100%);
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            color: #000;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .button-animate {
+            animation: buttonPress 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        
+        @keyframes buttonPress {
+            0% { transform: scale(1); }
+            30% { transform: scale(0.95); }
+            50% { transform: scale(1.02); }
+            75% { transform: scale(0.98); }
+            100% { transform: scale(1); }
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 80px;
+        }
+        
+        .feature-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 32px;
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border);
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .feature-icon {
+            margin-bottom: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+        }
+        
+        .feature-icon i {
+            font-size: 26px;
+            color: var(--text-primary);
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .result-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+        
+        .result-container.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .result-card {
+            background-color: var(--card-bg);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 24px;
+            padding: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+            transform: translateY(40px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .result-container.active .result-card {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .result-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(60, 60, 67, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .result-close i {
+            color: var(--text-secondary);
+            font-size: 20px;
+        }
+        
+        .result-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            user-select: text;
+        }
+        
+        .result-profile {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #333;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .result-profile i {
+            font-size: 40px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .result-info {
+            text-align: center;
+        }
+        
+        .result-info h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .result-username {
+            color: var(--text-secondary);
+            font-size: 17px;
+            margin-bottom: 24px;
+        }
+        
+        .result-region {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 12px 24px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .result-region i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .result-region span {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .result-button {
+            margin-top: 32px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 32px;
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            position: relative;
+            margin: 0 auto 16px;
+        }
+        
+        .loading-spinner:before, .loading-spinner:after {
+            content: "";
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #fff;
+            opacity: 0.6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: sk-bounce 2.0s infinite ease-in-out;
+        }
+        
+        .loading-spinner:after {
+            animation-delay: -1.0s;
+        }
+        
+        @keyframes sk-bounce {
+            0%, 100% { transform: scale(0); }
+            50% { transform: scale(1); }
+        }
+        
+        @media (max-width: 768px) {
+            .features { grid-template-columns: 1fr; }
+            .result-stats { grid-template-columns: 1fr 1fr; }
+        }
+        
+        @media (max-width: 480px) {
+            .result-stats { grid-template-columns: 1fr; }
+            .result-card { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-globe"></i>
+            </div>
+            <h1>TikTok Region Finder</h1>
+            <p class="subtitle">Discover the region of any TikTok user with our sleek, modern tool</p>
+        </header>
+        
+        <div class="search-container">
+            <div class="search-header">
+                <h2>Enter a TikTok Username</h2>
+                <p>Find out where your favorite creators are based</p>
+            </div>
+            
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <div class="input-icon">
+                        <i class="fab fa-tiktok"></i>
+                    </div>
+                    <input type="text" placeholder="Enter TikTok username (without @)" autocomplete="off" id="username-input">
+                </div>
+            </div>
+            <button id="find-button">Find Region</button>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="feature-title">Region Detection</div>
+                <div class="feature-description">
+                    Instantly identify which country or region the TikTok user is based in
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="feature-title">Fast Results</div>
+                <div class="feature-description">
+                    Our powerful algorithm delivers detailed results in seconds
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="feature-title">Privacy Focused</div>
+                <div class="feature-description">
+                    Only uses publicly available information from TikTok profiles
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="feature-title">Detailed Analytics</div>
+                <div class="feature-description">
+                    View comprehensive profile statistics and engagement metrics
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="result-container" id="result-modal">
+        <div class="result-card">
+            <div class="result-close" id="result-close">
+                <i class="fas fa-times"></i>
+            </div>
+            
+            <div class="result-content" id="loading-content">
+                <div class="loading-spinner"></div>
+                <h3>Analyzing Profile</h3>
+                <p class="result-username">Please wait a moment...</p>
+            </div>
+            
+            <div class="result-content" id="result-content" style="display: none;">
+                <div class="result-profile">
+                    <i class="fas fa-user"></i>
+                </div>
+                
+                <div class="result-info">
+                    <h3 id="result-name">TikTok User</h3>
+                    <p class="result-username" id="result-username">@username</p>
+                    
+                    <div class="result-region">
+                        <i class="fas fa-globe"></i>
+                        <span id="result-region-text">United States</span>
+                    </div>
+                    
+                    <div class="result-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="result-followers">2.4M</div>
+                            <div class="stat-label">Followers</div>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <div class="stat-value" id="result-videos">128</div>
+                            <div class="stat-label">Videos</div>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <div class="stat-value" id="result-likes">32.8M</div>
+                            <div class="stat-label">Likes</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="result-button" id="result-done-btn">Done</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Main functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const findButton = document.getElementById('find-button');
+            const resultModal = document.getElementById('result-modal');
+            const resultClose = document.getElementById('result-close');
+            const resultDoneBtn = document.getElementById('result-done-btn');
+            const loadingContent = document.getElementById('loading-content');
+            const resultContent = document.getElementById('result-content');
+            const usernameInput = document.getElementById('username-input');
+            
+            // Find button click handler
+            findButton.addEventListener('click', async function() {
+                findButton.classList.add('button-animate');
+                
+                const username = usernameInput.value.trim();
+                
+                if (!username) {
+                    usernameInput.focus();
+                    setTimeout(() => {
+                        findButton.classList.remove('button-animate');
+                    }, 600);
+                    return;
+                }
+                
+                // Show the modal with loading state
+                setTimeout(() => {
+                    resultModal.classList.add('active');
+                    loadingContent.style.display = 'flex';
+                    resultContent.style.display = 'none';
+                    findButton.classList.remove('button-animate');
+                }, 600);
+                
+                try {
+                    // Get TikTok user info
+                    const userData = await getTikTokUserInfo(username);
+                    
+                    // Update UI with data
+                    updateResultsWithUserData(userData);
+                    
+                    // Show result content
+                    loadingContent.style.display = 'none';
+                    resultContent.style.display = 'flex';
+                } catch (error) {
+                    console.error("Error:", error);
+                    
+                    // Show error state
+                    loadingContent.style.display = 'none';
+                    resultContent.style.display = 'flex';
+                    
+                    // Update with error message
+                    document.getElementById('result-name').textContent = "Error";
+                    document.getElementById('result-username').textContent = error.message || "Unable to analyze profile";
+                    document.getElementById('result-region-text').textContent = "Unknown";
+                    document.getElementById('result-followers').textContent = "0";
+                    document.getElementById('result-videos').textContent = "0";
+                    document.getElementById('result-likes').textContent = "0";
+                }
+            });
+            
+            // Close modal handlers
+            resultClose.addEventListener('click', closeModal);
+            resultDoneBtn.addEventListener('click', closeModal);
+            resultModal.addEventListener('click', function(e) {
+                if (e.target === resultModal) closeModal();
+            });
+            
+            function closeModal() {
+                resultModal.classList.remove('active');
+            }
+            
+            // Update results with user data
+            function updateResultsWithUserData(userData) {
+                document.getElementById('result-name').textContent = userData.nickname;
+                document.getElementById('result-username').textContent = '@' + userData.unique_id;
+                document.getElementById('result-region-text').textContent = getReadableRegion(userData.region);
+                document.getElementById('result-followers').textContent = formatNumber(userData.followers);
+                document.getElementById('result-videos').textContent = formatNumber(userData.videos);
+                document.getElementById('result-likes').textContent = formatNumber(userData.likes);
+            }
+            
+            // Format large numbers
+            function formatNumber(num) {
+                num = parseInt(num);
+                if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+                if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+                return num.toString();
+            }
+            
+            // Get readable region name
+            function getReadableRegion(regionCode) {
+                const regionMap = {
+                    'US': 'United States', 'UK': 'United Kingdom', 'CA': 'Canada',
+                    'JP': 'Japan', 'KR': 'South Korea', 'AU': 'Australia',
+                    'DE': 'Germany', 'FR': 'France', 'IT': 'Italy', 'ES': 'Spain',
+                    'BR': 'Brazil', 'MX': 'Mexico', 'RU': 'Russia', 'IN': 'India'
+                };
+                return regionMap[regionCode] || regionCode;
+            }
+        });
+
+        // API function to get TikTok user info
+        async function getTikTokUserInfo(username) {
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to analyze profile');
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('Error:', error);
+                throw error;
+            }
+        }
+    </script>
+</body>
+</html>
